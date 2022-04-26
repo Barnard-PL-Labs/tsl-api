@@ -10,10 +10,13 @@
     <script>
       function callSynth() {
       tslSpec = document.getElementById("specBox").value;
-      axios
-        .get("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec)
+      tslSpec = tslSpec.replace(/\n/g, " ");
+      targetLang = document.getElementById("targetLang").value;
+      fetch("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec+"&target="+targetLang)
         .then(response => {
-          document.getElementById("codeBox").value = response.data;
+          response.text().then(function(text) {
+            document.getElementById("codeBox").value = text;
+          });
         })
         .catch(error => console.error(error));
       }
@@ -37,6 +40,11 @@
     <h1>TSL API</h1>
     <p class="fs-5 col-md-8">Run TSL Synthesis from your browser</p>
     <button type="submit" class="btn btn-primary" onclick="callSynth()">Run Synthesis</button>
+    <select id="targetLang">
+      <option value="js">javascript</option>
+      <option value="python">python</option>
+      <option value="xstate">xstate</option>
+    </select>
   </main>
 </div>
 

@@ -18,6 +18,9 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 
+var cors = require('cors');
+app.use(cors());
+
 // Verify the the dot utility is available at startup
 // instead of waiting for a first request.
 //fs.accessSync('/usr/bin/dot', fs.constants.X_OK);
@@ -30,7 +33,7 @@ app.get('/', (req, res) => {
 // [START run_system_package_handler]
 app.get('/tslsynth', (req, res) => {
   try {
-    const synthResult = createDiagram(req.query.tsl);
+    const synthResult = createDiagram(req.query.tsl, req.query.target);
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Cache-Control', 'public, max-age=86400');
     res.send(synthResult);
@@ -50,9 +53,12 @@ app.get('/tslsynth', (req, res) => {
 // [START cloudrun_system_package_exec]
 // [START run_system_package_exec]
 // Generate a diagram based on a graphviz DOT diagram description.
-const createDiagram = tsl => {
+const createDiagram = (tsl, target) => {
   if (!tsl) {
     throw new Error('syntax: no tsl spec provided');
+  }
+  if (!target) {
+    target = "js"
   }
   try {
   fs.writeFileSync('tsltools/tmp.tsl', tsl)
@@ -60,11 +66,12 @@ const createDiagram = tsl => {
     console.error(err)
   }
  
-  const synthResult = execSync(`./tslsynth tmp.tsl --js`, {
+  const synthResult = execSync(`./tslsynth tmp.tsl --`+target, {
     cwd: "./tsltools",
     input: tsl,
   });
-  console.log(synthResult);
+  console.log("synthResult");
+  console.log(String(synthResult));
   return synthResult;
 };
 // [END run_system_package_exec]

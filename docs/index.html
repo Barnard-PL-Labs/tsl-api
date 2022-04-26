@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>TSL Synth</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      function callSynth() {
+      tslSpec = document.getElementById("specBox").value;
+      axios
+        .get("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec)
+        .then(response => {
+          document.getElementById("codeBox").value = response.data;
+        })
+        .catch(error => console.error(error));
+      }
+    </script>
+
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/starter-template/">
+    
+
+    <!-- Bootstrap core CSS -->
+    <link href="./assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+  </head>
+  <body>
+    
+<div class="col-lg-6 mx-auto p-3 py-md-5">
+  <main>
+
+    <h1>TSL API</h1>
+    <p class="fs-5 col-md-8">Run TSL Synthesis from your browser</p>
+    <button type="submit" class="btn btn-primary" onclick="callSynth()">Run Synthesis</button>
+  </main>
+</div>
+
+<div class="row mx-auto">
+    <div class="col-5 offset-1">
+      <p>Enter a TSL spec here</p>
+      <textarea class="input-xlarge" id="specBox" rows="10" spellcheck="false" style="min-width:100%"></textarea>
+    </div>
+    <div class="col-5">
+      <p>Get the code here</p>
+      <textarea class="input-xlarge" id="codeBox" rows="10" spellcheck="false" style="min-width:100%"></textarea>
+    </div>
+  </div>
+
+    <script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
+
+      
+  </body>
+</html>

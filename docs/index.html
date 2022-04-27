@@ -10,7 +10,7 @@
     <script>
       function callSynth() {
       tslSpec = document.getElementById("specBox").value;
-      tslSpec = tslSpec.replace(/\n/g, " ");
+      tslSpec = encodeURIComponent(tslSpec.replace(/\n/g, " "));
       targetLang = document.getElementById("targetLang").value;
       fetch("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec+"&target="+targetLang)
         .then(response => {

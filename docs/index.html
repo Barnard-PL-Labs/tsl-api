@@ -51,7 +51,15 @@
 <div class="row mx-auto">
     <div class="col-5 offset-1">
       <p>Enter a TSL spec here</p>
-      <textarea class="input-xlarge" id="specBox" rows="10" spellcheck="false" style="min-width:100%"></textarea>
+      <textarea class="input-xlarge" id="specBox" rows="10" spellcheck="false" style="min-width:100%">
+always assume {
+}
+
+always guarantee {
+    F ([noteToPlay <- E4]);
+    F ([noteToPlay <- G4]);
+}
+</textarea>
     </div>
     <div class="col-5">
       <p>Get the code here</p>

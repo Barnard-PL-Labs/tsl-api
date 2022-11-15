@@ -24,13 +24,13 @@ ENV DEBIAN_FRONTEND noninteractive
 # [START cloudrun_system_package_alpine]
 # [START run_system_package_alpine]
 #RUN apk --no-cache add graphviz ttf-ubuntu-font-family
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y && apt-get install -y\
   nodejs npm \
   wget git \
   && apt-get clean
 # [END run_system_package_alpine]
 # [END cloudrun_system_package_alpine]
-
+RUN apt-get install libpcre3 libpcre3-dev -y
 RUN wget -qO- https://get.haskellstack.org/ | sh
 RUN git clone https://github.com/Barnard-PL-Labs/tsltools
 RUN cd tsltools && make
@@ -39,7 +39,6 @@ RUN wget -q -O - https://www.lrde.epita.fr/repo/debian.gpg | apt-key add -
 RUN echo 'deb http://www.lrde.epita.fr/repo/debian/ stable/' >> /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install -y spot
-
 
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure both package.json AND package-lock.json are copied.

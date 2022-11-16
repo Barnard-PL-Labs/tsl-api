@@ -26,7 +26,7 @@ app.use(cors());
 //fs.accessSync('/usr/bin/dot', fs.constants.X_OK);
 
 app.get('/', (req, res) => {
-    res.send("hello tsl");
+    res.send("hello tsl. go to /tslsynth to make a request");
 });
 
 // [START cloudrun_system_package_handler]
@@ -43,7 +43,7 @@ app.get('/tslsynth', (req, res) => {
     if (errDetails.includes('syntax')) {
       res.status(400).send(`Bad Request: ${err.message}`);
     } else {
-      res.status(500).send('Internal Server Error');
+      res.status(500).send(err.message);
     }
   }
 });

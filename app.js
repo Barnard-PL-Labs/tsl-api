@@ -47,6 +47,23 @@ app.get('/tslsynth', (req, res) => {
     }
   }
 });
+
+app.get('/tslminrealizable', (req, res) => {
+  try {
+    const synthResult = createMinDiagram(req.query.tsl);
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.send(synthResult);
+  } catch (err) {
+    console.error(`error: ${err.message}`);
+    const errDetails = (err.stderr || err.message).toString();
+    if (errDetails.includes('syntax')) {
+      res.status(400).send(`Bad Request: ${err.message}`);
+    } else {
+      res.status(500).send('Internal Server Error');
+    }
+  }
+});
 // [END run_system_package_handler]
 // [END cloudrun_system_package_handler]
 
@@ -70,10 +87,32 @@ const createDiagram = (tsl, target) => {
     cwd: "./tsltools",
     input: tsl,
   });
+
+  console.log("synthResult");
+  console.log(String(synthResult));
+
+  return synthResult;
+};
+
+const createMinDiagram = (tsl) => {
+  if (!tsl) {
+    throw new Error('syntax: no tsl spec provided');
+  }
+  try {
+    fs.writeFileSync('tsltools/tmp.tsl', tsl)
+  } catch (err) {
+    console.error(err)
+  }
+
+  const synthResult = execSync(`./tslminrealizable tmp.tsl -r /usr/src/app/tsltools/tlsfSynth_stdin.sh`, {
+    cwd: "./tsltools",
+    input: tsl,
+  });
   console.log("synthResult");
   console.log(String(synthResult));
   return synthResult;
 };
+
 // [END run_system_package_exec]
 // [END cloudrun_system_package_exec]
 

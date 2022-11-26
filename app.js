@@ -21,6 +21,8 @@ const app = express();
 var cors = require('cors');
 app.use(cors());
 
+app.use(require('body-parser').urlencoded({ extended: false }));
+
 // Verify the the dot utility is available at startup
 // instead of waiting for a first request.
 //fs.accessSync('/usr/bin/dot', fs.constants.X_OK);
@@ -31,9 +33,11 @@ app.get('/', (req, res) => {
 
 // [START cloudrun_system_package_handler]
 // [START run_system_package_handler]
-app.get('/tslsynth', (req, res) => {
+app.post('/tslsynth', function(req, res){
+  var tsl = req.body.tsl;
+  var target = req.body.target;
   try {
-    const synthResult = createDiagram(req.query.tsl, req.query.target);
+    const synthResult = createDiagram(tsl, target);
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Cache-Control', 'public, max-age=86400');
     res.send(synthResult);
@@ -88,7 +92,13 @@ const createDiagram = (tsl, target) => {
     input: tsl,
   });
 
-  console.log("synthResult");
+  console.log("tslSpec:");
+  console.log(tsl);
+
+  console.log("target:")
+  console.log(target);
+
+  console.log("synthResult:");
   console.log(String(synthResult));
 
   return synthResult;

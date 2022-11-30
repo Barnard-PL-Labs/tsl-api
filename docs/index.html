@@ -7,24 +7,19 @@
     <meta name="generator" content="Hugo 0.88.1">
     <title>TSL Synth</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
     <script>
       function callSynth() {
-      tslSpec = document.getElementById("specBox").value;
-      tslSpec = encodeURIComponent(tslSpec.replace(/\n/g, " "));
-      targetLang = document.getElementById("targetLang").value;
-      fetch("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth?tsl="+tslSpec+"&target="+targetLang)
-        .then(response => {
-          response.text().then(function(text) {
-            document.getElementById("codeBox").value = text;
-          });
-        })
-        .catch(error => console.error(error));
+      let tslSpec = document.getElementById("specBox").value;
+      let targetLang = document.getElementById("targetLang").value;
+      $.post("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth", {tsl: tslSpec, target: targetLang, id: userID}, function(data){
+        document.getElementById("codeBox").value = data;
+        });
       }
+
     </script>
 
-
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/starter-template/">
-    
 
     <!-- Bootstrap core CSS -->
     <link href="./assets/dist/css/bootstrap.min.css" rel="stylesheet">

@@ -36,6 +36,17 @@ app.get('/', (req, res) => {
 app.post('/tslsynth', function(req, res){
   var tsl = req.body.tsl;
   var target = req.body.target;
+  var user = req.body.user;
+
+  console.log("User ID:")
+  console.log(user);
+
+  console.log("tslSpec:");
+  console.log(tsl);
+
+  console.log("target:")
+  console.log(target);
+
   try {
     const synthResult = createDiagram(tsl, target);
     res.setHeader('Content-Type', 'text/plain');
@@ -52,9 +63,13 @@ app.post('/tslsynth', function(req, res){
   }
 });
 
-app.get('/tslminrealizable', (req, res) => {
+app.post('/tslminrealizable', (req, res) => {
+  console.log("User ID:")
+  console.log(req.body.user);
+
   try {
-    const synthResult = createMinDiagram(req.query.tsl);
+    const synthResult = createMinDiagram(req.body.tsl);
+
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Cache-Control', 'public, max-age=86400');
     res.send(synthResult);
@@ -91,12 +106,6 @@ const createDiagram = (tsl, target) => {
     cwd: "./tsltools",
     input: tsl,
   });
-
-  console.log("tslSpec:");
-  console.log(tsl);
-
-  console.log("target:")
-  console.log(target);
 
   console.log("synthResult:");
   console.log(String(synthResult));

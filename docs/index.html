@@ -14,7 +14,11 @@
       let targetLang = document.getElementById("targetLang").value;
       $.post("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth", {tsl: tslSpec, target: targetLang}, function(data){
         document.getElementById("codeBox").value = data;
-        });
+        })
+      .fail(function(response) {
+        document.getElementById("codeBox").value = response.responseText;
+      });
+      
       }
 
     </script>

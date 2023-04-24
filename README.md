@@ -11,16 +11,20 @@ Follow the directions here: https://cloud.google.com/run/docs/tutorials/system-p
 
 To test locally
 
+```
    docker build -t tsl/api . 
    docker run -d -p 8080:8080 tsl/api
+```
 
 then go to localhost:8080. note that this only works with port 8080
 
 to deploy
 
+```
    docker build -t tsl/api . 
    gcloud builds submit --tag gcr.io/tslapi-2/tsl --timeout=1h
    gcloud run deploy graphviz-web --image gcr.io/tslapi-2/tsl
+```
 
 you need to set a longer time out since it takes so long to build (30 min maybe?).
 

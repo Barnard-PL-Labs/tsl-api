@@ -30,15 +30,25 @@ RUN apt-get update -y && apt-get install -y\
   && apt-get clean
 # [END run_system_package_alpine]
 # [END cloudrun_system_package_alpine]
-RUN apt-get install libpcre3 libpcre3-dev -y
-RUN wget -qO- https://get.haskellstack.org/ | sh
-RUN git clone https://github.com/Barnard-PL-Labs/tsltools
-RUN cd tsltools && make
 
 RUN wget -q -O - https://www.lrde.epita.fr/repo/debian.gpg | apt-key add -
 RUN echo 'deb http://www.lrde.epita.fr/repo/debian/ stable/' >> /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install -y spot
+RUN apt-get install -y unzip
+
+RUN mkdir deps-src
+RUN wget -P deps-src https://github.com/cvc5/cvc5/releases/download/cvc5-1.1.1/cvc5-Linux-static.zip
+RUN unzip deps-src/cvc5-Linux-static.zip -d deps-src
+RUN chmod a+x deps-src/cvc5-Linux-static/bin/cvc5 
+RUN mv deps-src/cvc5-Linux-static/bin/cvc5 /usr/bin
+
+RUN apt-get install libpcre3 libpcre3-dev -y
+RUN wget -qO- https://get.haskellstack.org/ | sh
+RUN git clone https://github.com/Barnard-PL-Labs/tsltools
+WORKDIR /usr/src/app/tsltools
+RUN stack install
+RUN cp /root/.local/bin/tsl /usr/bin
 
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure both package.json AND package-lock.json are copied.

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const {execSync} = require('child_process');
+const { execSync } = require('child_process');
 const fs = require('fs');
 
 const express = require('express');
@@ -28,12 +28,12 @@ app.use(require('body-parser').urlencoded({ extended: false }));
 //fs.accessSync('/usr/bin/dot', fs.constants.X_OK);
 
 app.get('/', (req, res) => {
-    res.send("hello tsl. go to /tslsynth to make a request");
+  res.send("hello tsl. go to /tslsynth to make a request");
 });
 
 // [START cloudrun_system_package_handler]
 // [START run_system_package_handler]
-app.post('/tslsynth', function(req, res){
+app.post('/tslsynth', function (req, res) {
   var tsl = req.body.tsl;
   var target = req.body.target;
   var user = req.body.user;
@@ -97,13 +97,13 @@ const createDiagram = (tsl, target) => {
     target = "js"
   }
   try {
-  fs.writeFileSync('tsltools/tmp.tsl', tsl)
+    fs.writeFileSync('/usr/src/app/tsltools/tmp.tsl', tsl)
   } catch (err) {
     console.error(err)
   }
- 
-  const synthResult = execSync(`./tslsynth tmp.tsl --`+target, {
-    cwd: "./tsltools",
+
+  const synthResult = execSync(`tsl synthesize -i tmp.tsl --` + target, {
+    cwd: "/usr/src/app/tsltools",
     input: tsl,
   });
 

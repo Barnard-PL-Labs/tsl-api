@@ -20,12 +20,19 @@ To test locally
 
 then go to localhost:8080. note that this only works with port 8080
 
+to test, run this in the command line
+
+```
+curl -X POST http://localhost:8080/tslsynth -d 'tsl=always%20assume%20{}%0Aalways%20guarantee%20{%0A%20%20F%20([x%20<-%20y]);%0A%20%20F%20([x%20<-%20z]);%0A}&target=js&user=1}' -H 'Content-Type: application/x-www-form-urlencoded'
+```
+
+
 to deploy
 
 ```
    docker build -t tsl/api . 
-   gcloud builds submit --tag gcr.io/tslapi-2/tsl --timeout=1h
-   gcloud run deploy graphviz-web --image gcr.io/tslapi-2/tsl
+   gcloud config set project tslapi-2
+   gcloud builds submit --tag gcr.io/tslapi-2/tsl --timeout=1h && gcloud run deploy graphviz-web --image gcr.io/tslapi-2/tsl
 ```
 
 you need to set a longer time out since it takes so long to build (30 min maybe?).

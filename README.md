@@ -32,6 +32,7 @@ to deploy
 ```
    docker build -t tsl/api . 
    gcloud config set project tslapi-2
+   gcloud config set run/region us-east1
    gcloud builds submit --tag gcr.io/tslapi-2/tsl --timeout=1h && gcloud run deploy graphviz-web --image gcr.io/tslapi-2/tsl
 ```
 

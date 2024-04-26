@@ -38,17 +38,10 @@ app.post('/tslsynth', function (req, res) {
   var target = req.body.target;
   var user = req.body.user;
 
-  console.log("User ID:")
-  console.log(user);
-
-  console.log("tslSpec:");
-  console.log(tsl);
-
-  console.log("target:")
-  console.log(target);
-
   try {
     const synthResult = createDiagram(tsl, target);
+    logSpec(req, synthResult.toString());
+
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Cache-Control', 'public, max-age=86400');
     res.send(synthResult);
@@ -69,6 +62,8 @@ app.post('/tslminrealizable', (req, res) => {
 
   try {
     const synthResult = createMinDiagram(req.body.tsl);
+
+    logSpec(req, synthResult.toString());
 
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Cache-Control', 'public, max-age=86400');
@@ -107,9 +102,6 @@ const createDiagram = (tsl, target) => {
     input: tsl,
   });
 
-  console.log("synthResult:");
-  console.log(String(synthResult));
-
   return synthResult;
 };
 
@@ -127,8 +119,7 @@ const createMinDiagram = (tsl) => {
     cwd: "./tsltools",
     input: tsl,
   });
-  console.log("synthResult");
-  console.log(String(synthResult));
+
   return synthResult;
 };
 
@@ -136,3 +127,44 @@ const createMinDiagram = (tsl) => {
 // [END cloudrun_system_package_exec]
 
 module.exports = app;
+
+function logSpec(req, synthResult) {
+  var tsl = req.body.tsl;
+  var target = req.body.target;
+  var user = req.body.user;
+
+  const project = 'tslapi-2';
+
+  // Build structured log messages as an object.
+  const globalLogFields = {};
+
+  // Add log correlation to nest all log messages beneath request log in Log Viewer.
+  // (This only works for HTTP-based invocations where `req` is defined.)
+  if (typeof req !== 'undefined') {
+    const traceHeader = req.header('X-Cloud-Trace-Context');
+    if (traceHeader && project) {
+      const [trace] = traceHeader.split('/');
+      globalLogFields['logging.googleapis.com/trace'] =
+        `projects/${project}/traces/${trace}`;
+    }
+  }
+
+  // Complete a structured log entry.
+  const entry = Object.assign(
+    {
+      severity: 'NOTICE',
+      message: 'Logging TSL spec.',
+      // Log viewer accesses 'component' as 'jsonPayload.component'.
+      spec: tsl,
+      userId: user,
+      target: target,
+      synthResult: synthResult,
+      //license: "https://creativecommons.org/licenses/by-nc/4.0/" Don't need this in private logs, just in public repo
+    },
+    globalLogFields
+  );
+
+  // Serialize to a JSON string and output.
+  console.log(JSON.stringify(entry));
+}
+

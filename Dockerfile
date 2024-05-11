@@ -47,6 +47,8 @@ RUN apt-get install libpcre3 libpcre3-dev -y
 RUN wget -qO- https://get.haskellstack.org/ | sh
 RUN git clone https://github.com/Barnard-PL-Labs/tsltools
 WORKDIR /usr/src/app/tsltools
+RUN git reset --hard 57a1d8968e29b51e35e06deea6d2262b4ed3cefb 
+RUN git clean -df
 RUN stack install
 RUN cp /root/.local/bin/tsl /usr/bin
 

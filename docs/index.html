@@ -1,53 +1,73 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="generator" content="Hugo 0.88.1">
-    <title>TSL Synth</title>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
-    <script>
-      function callSynth() {
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.88.1">
+  <title>TSL Synth</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
+  <script>
+    function callSynth() {
       let tslSpec = document.getElementById("specBox").value;
       let targetLang = document.getElementById("targetLang").value;
-      $.post("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth", {tsl: tslSpec, target: targetLang}, function(data){
+      let userVal = document.getElementById("userBox").value;
+      let logging = document.getElementById("logging").checked;
+      $.post("https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth", { tsl: tslSpec, target: targetLang, user: userVal, logEnabled: logging }, function (data) {
         document.getElementById("codeBox").value = data;
-        })
-      .fail(function(response) {
-        document.getElementById("codeBox").value = response.responseText;
-      });
-      
-      }
+      })
+        .fail(function (response) {
+          document.getElementById("codeBox").value = response.responseText;
+        });
 
-    </script>
+    }
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/starter-template/">
+  </script>
 
-    <!-- Bootstrap core CSS -->
-    <link href="./assets/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Custom styles for this template -->
-    <link href="starter-template.css" rel="stylesheet">
-  </head>
-  <body>
-    
-<div class="col-lg-6 mx-auto p-3 py-md-5">
-  <main>
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/starter-template/">
 
-    <h1>TSL API</h1>
-    <p class="fs-5 col-md-8">Run TSL Synthesis from your browser</p>
-    <button type="submit" class="btn btn-primary" onclick="callSynth()">Run Synthesis</button>
-    <select id="targetLang">
-      <option value="js">javascript</option>
-      <option value="python">python</option>
-      <option value="xstate">xstate</option>
-    </select>
-  </main>
-</div>
+  <!-- Bootstrap core CSS -->
+  <link href="./assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<div class="row mx-auto">
+  <!-- Custom styles for this template -->
+  <link href="starter-template.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="col-lg-6 mx-auto p-3 py-md-5">
+    <main>
+
+      <h1>TSL API</h1>
+      <p class="fs-5 col-md-8">Run TSL Synthesis from your browser</p>
+      <button type="submit" class="btn btn-primary" onclick="callSynth()">Run Synthesis</button>
+      <select id="targetLang">
+        <option value="js">javascript</option>
+        <option value="python">python</option>
+        <option value="xstate">xstate</option>
+      </select>
+      <br>
+      <form>
+        <p>
+          We will log your synthesis requests and make them publicly available as benchmarks to help improve synthesis
+          tools.
+          Uncheck the box below if you don't want us to log anything.
+        </p>
+        <label for="logging">
+          Allow logging of my requests:
+          <input type="checkbox" id="logging" name="logging" checked>
+        </label>
+        <p>If you would like attribution credit for your specifications, enter a name or alias here:</p>
+        <input type="text" id="userBox" name="userBox" placeholder="Name or Alias">
+      </form>
+
+
+    </main>
+  </div>
+
+  <div class="row mx-auto">
     <div class="col-5 offset-1">
       <p>Enter a TSL spec here</p>
       <textarea class="input-xlarge" id="specBox" rows="10" spellcheck="false" style="min-width:100%">
@@ -66,8 +86,9 @@ always guarantee {
     </div>
   </div>
 
-    <script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
 
-      
-  </body>
+
+</body>
+
 </html>

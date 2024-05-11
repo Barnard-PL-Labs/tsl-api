@@ -46,3 +46,13 @@ no idea why it is still called graphviz-web...
 * **express**: Web server framework.
 * **mocha**: [development] Test running framework.
 * **supertest**: [development] HTTP assertion test client.
+
+## API Request Format
+
+This API requires requests to include the following parameters:
+
+- `tsl`: A string representing the specification.
+- `target`: Specifies the target language. Valid options are `javascript`, `python`, or `xstate`.
+- `user`: A string identifier for the user, used for logging purposes.
+- `logEnabled`: A boolean flag that controls logging. It is disabled by default (`false`). If logging is enabled, it is the responsibility of the API consumers to explain the implications of this setting to users. Enabled logs might be utilized as benchmarks, especially for SYNTCOMP competitions.
+

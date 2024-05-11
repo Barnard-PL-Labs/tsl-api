@@ -132,6 +132,7 @@ function logSpec(req, synthResult) {
   var tsl = req.body.tsl;
   var target = req.body.target;
   var user = req.body.user;
+  var logEnabled = req.body.logEnabled;
 
   const project = 'tslapi-2';
 
@@ -165,6 +166,7 @@ function logSpec(req, synthResult) {
   );
 
   // Serialize to a JSON string and output.
-  console.log(JSON.stringify(entry));
+  if (logEnabled) {
+    console.log(JSON.stringify(entry));
+  }
 }
-

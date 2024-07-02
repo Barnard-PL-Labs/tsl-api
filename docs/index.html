@@ -15,8 +15,8 @@
       let targetLang = document.getElementById("targetLang").value;
       let userVal = document.getElementById("userBox").value;
       let logging = document.getElementById("logging").checked;
-      const urlEndpoint = 'http://localhost:8080/tslsynth'
-      //const urlEndpoint = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth"
+      // const urlEndpoint = 'http://localhost:8080/tslsynth'
+      const urlEndpoint = "https://graphviz-web-vvxsiayuzq-ue.a.run.app/tslsynth"
       $.post(urlEndpoint, { tsl: tslSpec, target: targetLang, user: userVal, logEnabled: logging }, function (data) {
         document.getElementById("codeBox").value = data;
       })
